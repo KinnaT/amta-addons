@@ -1,11 +1,11 @@
 <?php
 /*
-  Plugin Name: Event Espresso - New Addon (EE4.x+)
+  Plugin Name: Event Espresso - Certificate Creation (EE4.x+)
   Plugin URI: http://www.eventespresso.com
-  Description: The Event Espresso New Addon adds NEW stuff to Event Espresso.
+  Description: Adds the ability to create certificates of attendance from events.
   Version: 1.0.0.dev.000
-  Author: Event Espresso
-  Author URI: http://www.eventespresso.com
+  Author: Kinna Thompson
+  Author URI: https://twitter.com/real_kinna
   Copyright 2014 Event Espresso (email : support@eventespresso.com)
 
   This program is free software; you can redistribute it and/or modify
@@ -27,12 +27,12 @@
  *
  * Event Registration and Management Plugin for WordPress
  *
- * @ package		Event Espresso
- * @ author			Event Espresso
- * @ copyright	(c) 2008-2014 Event Espresso  All Rights Reserved.
- * @ license		http://eventespresso.com/support/terms-conditions/   * see Plugin Licensing *
- * @ link				http://www.eventespresso.com
- * @ version	 	EE4
+ * @ package        Event Espresso
+ * @ author            Event Espresso
+ * @ copyright    (c) 2008-2014 Event Espresso  All Rights Reserved.
+ * @ license        http://eventespresso.com/support/terms-conditions/   * see Plugin Licensing *
+ * @ link                http://www.eventespresso.com
+ * @ version         EE4
  *
  * ------------------------------------------------------------------------
  */
@@ -49,10 +49,10 @@ define( 'EE_NEW_ADDON_PLUGIN_FILE',  __FILE__ );
  */
 function espresso_new_addon_plugin_activation_errors() {
 
-	if ( WP_DEBUG ) {
-		$activation_errors = ob_get_contents();
-		file_put_contents( EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_new_addon_plugin_activation_errors.html', $activation_errors );
-	}
+    if ( WP_DEBUG ) {
+        $activation_errors = ob_get_contents();
+        file_put_contents( EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_new_addon_plugin_activation_errors.html', $activation_errors );
+    }
 }
 add_action( 'activated_plugin', 'espresso_new_addon_plugin_activation_errors' );
 
