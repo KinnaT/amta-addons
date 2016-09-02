@@ -1,0 +1,8 @@
+$posts = get_posts(array('post_type'=>'espresso_events','suppress_filters'=>false));
+        foreach($posts as $post){
+            $event_obj = $post->EE_Event;
+            $link = $event_obj->get_permalink();
+            echo "<a href='$link'>{$event_obj->name()}</a>";
+            $datetimes = $event_obj->datetimes_ordered();
+            echo "has ".count($datetimes)." datetimes";
+        }
