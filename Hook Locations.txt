@@ -1,0 +1,5 @@
+Locations:
+core-reg/caffeinated/admin/new/pricing/templates/...
+espresso_events_Pricing_Hooks.class.php
+
+core/admin_pages/events/templates/
