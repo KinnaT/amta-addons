@@ -1,0 +1,258 @@
+/* Ninja Forms Customizations - adding responsive column styles */
+div.ninja-forms-all-fields-wrap {
+    height: auto;
+    font-family: Source Sans Pro;
+    font-size: 14px;
+}
+div.ninja-forms-required-items {
+    display: none;
+    }
+div.ninja-forms-error-msg {
+    font-family: Source Sans Pro;
+    color: red;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 3%;
+    }
+.ninja-forms-field-error {
+    display: none !important;
+}
+div.field-wrap {
+    margin-bottom: 8px;
+    position: relative;
+    margin-top: 1%;
+}
+.ninja-forms-field-wrap {
+    margin-top: 5px;
+}
+.ninja-forms-field {
+    font-size: 14px;
+    line-height: 22px;
+    padding: 5px;
+    font-family: Source Sans Pro;
+    border: 1px solid #c4c4c4;
+    border-radius: 3px;
+}
+.ninja-forms-field::-webkit-input-placeholder {
+    text-indent: 5px;
+}
+.ninja-forms-field::-moz-placeholder { /* Firefox 19+ */
+    text-indent: 5px;
+}
+.ninja-forms-field:-ms-input-placeholder {
+    text-indent: 5px;
+}
+.ninja-forms-field:-moz-placeholder { /* Firefox 18- */
+    text-indent: 5px;
+}
+hr.ninja-forms-field {
+    border: 1px solid;
+    border-color: #fff #fff #c4c4c4 #fff;
+    display: none;
+    width: 98%;
+    margin: 0 1% 0 1%;
+}
+hr.white {
+    border-color: #fff;
+}
+.nf-desc {
+    border: none;
+}
+textarea.ninja-forms-field:hover {
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+}
+div.input-counter {
+    display: none;
+}
+div.textarea-wrap {
+    height: auto;
+    max-height: 350px;
+    display: inline-block !important;
+    position: relative;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+.text-wrap.label-above label, .textarea-wrap.label-above label {
+    display: inline-block;
+}
+.nolabel input {
+    width: 100% !important;
+}
+.nolabel-wrap label {
+    display: none !important;
+}
+div.textarea-wrap label {
+    display: inline-block;
+    position: relative;
+    margin-top: 5px;
+}
+div.textarea-short-wrap {
+    height: 100px !important;
+    max-width: 282px;
+    display: block;
+    position: relative;
+    margin: 10px 0 10px 0;
+}
+textarea.textarea-short {
+    height: 100px !important;
+
+}
+.textarea-short-wrap label {
+    display: none;
+}
+.submit-dark {
+    color: #eee;
+    background-color: #555;
+    border-color: #555;
+    padding: 5px 15px;
+    cursor: pointer;
+}
+div.contact-email-wrap {
+    height: auto;
+    max-width: 282px !important;
+    display: block;
+    position: relative;
+}
+.contact-email {
+    text-indent: 5px;
+}
+.field-full-wrap .wp-editor-tools div {
+    display: none;
+}.field-full-wrap #mceu_33 {    border: 1px solid #AAAAAA;}.field-full-wrap #mceu_40 {    border-right: 1px solid #AAAAAA !important;}
+.list-checkbox-wrap label {
+    display: block;
+}
+.list-checkbox-wrap .ninja-forms-field-description {
+    display: block;
+}
+.list-radio-wrap span ul, .list-checkbox-wrap span ul {
+    margin: 10px 0 0 0 !important;
+}
+div.submit-wrap {
+    max-height: 30px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    margin-top: 15px !important;
+    margin-left: 3%;
+    font-family: Source Sans Pro;
+    cursor: pointer;
+}
+div.field-full-wrap {
+    width: 94%;
+    display: inline-block;
+    position: relative;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+input.field-full {
+    margin: 0;
+}
+.number-wrap input {
+    width: 100% !important;
+}
+textarea.field-full {
+    margin: 0;
+}
+div.field-onethird-wrap {
+    width: 29%;
+    display: inline;
+    position: relative;
+    float: left;
+    margin-left: 3%;
+ }
+div.field-twothirds-wrap {
+    width: 62%;
+    display: inline;
+    float: left;
+    margin-left: 3%;
+ }
+div.field-half-wrap {
+    width: 45%;
+    display: inline;
+    position: relative;
+    float: left;
+    margin-left: 3%;
+    margin-right: 2%;
+}
+ div.field-onethird-right-wrap {
+    width: 29%;
+    display: inline;
+    position: relative;
+    float: right;
+    text-align: left;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+div.field-twothirds-right-wrap {
+    width: 62%;
+    display: inline;
+    position: relative;
+    float: right;
+    text-align: left;
+    margin-right: 3%;
+}
+div.field-half-right-wrap {
+    width: 45%;
+    display: inline;
+    position: relative;
+    float: right;
+    text-align: left;
+    margin-left: 2%;
+    margin-right: 3%;
+}
+@media all and (max-width: 767px) {
+    .nf-desc {
+        border: none !important;
+    }
+div.textarea-wrap {
+  /*  height: auto; */
+    max-height: 400px;
+    display: inline-block;
+    position: relative;
+    width: 95%;
+    margin-top: 5px;
+    margin-bottom: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+div.field-onethird-wrap {
+    width: 95%;
+    display: block;
+ }
+div.field-twothirds-wrap {
+    width: 95%;
+    display: block;
+    float: none;
+ }
+div.field-half-wrap {
+    width: 95%;
+    display: block;
+}
+ div.field-onethird-right-wrap {
+    width: 95%;
+    display: block;
+    float: left;
+    text-align: left;
+}
+div.field-twothirds-right-wrap {
+    width: 95%;
+    display: block;
+    float: left;
+    text-align: left;
+}
+div.field-half-right-wrap {
+    width: 95%;
+    display: block;
+    float: left;
+    text-align: left;
+}
+}
+/*.breadcrumb-container.theme5 a {
+    display: inline !important;
+}*/

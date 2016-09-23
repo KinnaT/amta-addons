@@ -3,3 +3,8 @@ core-reg/caffeinated/admin/new/pricing/templates/...
 espresso_events_Pricing_Hooks.class.php
 
 core/admin_pages/events/templates/
+
+http://code.eventespresso.com/class-EE_Datetime.html
+https://eventespresso.com/topic/ee4-hooks/
+https://github.com/eventespresso/event-espresso-core/blob/master/docs/I--Filter-and-Action-Hooks-in-EE/FHEE__espresso_events_Pricing_Hooks___get_datetime_tickets_list_item__template_args.md
+https://github.com/eventespresso/event-espresso-core/blob/626b3f193af30eb1edd953772623988be8695a02/docs/A--Best-Practices/ee-actions-and-filters.md
