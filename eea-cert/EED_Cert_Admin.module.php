@@ -36,10 +36,12 @@ class EED_Cert_Admin  extends EED_Module {
         add_filter( 'FHEE__Events_Admin_Page___insert_update_cpt_item__event_update_callbacks', array( 'EED_Cert_Admin', 'set_callback_save_cert_event_setting' ), 10, 2 );
   //      add_filter( 'FHEE__EED_Cert_Admin__event_editor_metabox__cert_form_content', array( 'EED_Cert_Admin', 'set_capability_default_cert_role_event_editor' ), 10 );
 
-        //hook into ticket editor in event editor.
-     add_action('AHEE__event_tickets_datetime_datetime_row_template__advanced_dtt_start', array('EED_Cert_Admin', 'insert_datetime_meta_interface'), 10, 2); add_filter('FHEE__espresso_events_Pricing_Hooks___get_datetime_edit_row__template_args', array('EED_Cert_Admin', 'insert_datetime_meta_interface'), 10, 7);
-        add_action( 'AHEE__espresso_events_Pricing_Hooks___update_dtts_new_datetime', array( 'EED_Cert_Admin', 'update_credits_on_datetime') , 10, 4 );
-        add_action( 'AHEE__espresso_events_Pricing_Hooks___update_dtts_update_datetime', array( 'EED_Cert_Admin', 'update_credits_on_datetime' ), 10, 4 );
+        //hook into datetime editor in event editor.
+         add_action('AHEE__event_tickets_datetime_attached_tickets_row_template__advanced_details_end', array('EED_Cert_Admin', 'insert_datetime_meta_interface'), 10, 2);
+           //     add_action('AHEE__event_tickets_datetime_ticket_row_template__advanced_details_end', array('EED_Cert_Admin', 'insert_datetime_meta_interface'), 10, 2);
+
+        add_filter('FHEE__espresso_events_Pricing_Hooks___get_datetime_edit_row__template_args', array('EED_Cert_Admin', 'insert_datetime_meta_interface'), 10, 7);
+        add_action( 'AHEE__espresso_events_Pricing_Hooks___update_dtts_update_datetime', array( 'EED_Cert_Admin', 'update_credits_on_datetime') , 10, 4 );
     }
     public function run( $WP ) {}
 
@@ -94,9 +96,9 @@ class EED_Cert_Admin  extends EED_Module {
     }
 
     public static function add_dtt_ce_box( $evt_obj, $data ) {
-        foreach ( $data['edit_event_datetimes'] as $row => $dtt ) {
+        foreach ( $dtts as $dtt ) {
             //trim all values to ensure any excess whitespace is removed.
-            $dtt = array_map(
+            $dtts = array_map(
                 function( $datetime_data ) {
                     return is_array( $datetime_data ) ? $datetime_data : trim( $datetime_data );
                 },
@@ -148,7 +150,7 @@ class EED_Cert_Admin  extends EED_Module {
                 'layout_strategy' => new EE_Div_Per_Section_Layout(),
                 'subsections' => apply_filters( 'FHEE__EED_Cert_Admin___cert_settings_form__form_subsections',
                     array(
-                        'main_settings_hdr' => new EE_Form_Section_HTML( EEH_HTML::h3( __('WP User Integration Defaults', 'event_espresso' ) ) ),
+                        'main_settings_hdr' => new EE_Form_Section_HTML( EEH_HTML::h3( __('Event Certificate Defaults', 'event_espresso' ) ) ),
                         'main_settings' => EED_Cert_Admin::_main_settings()
                         )
                     )
@@ -164,7 +166,6 @@ class EED_Cert_Admin  extends EED_Module {
      */
     protected static function _main_settings() {
         global $wp_roles;
-        $registration_turned_off_msg = get_option( 'users_can_register' ) ? '' : '<br><div class="error inline"><p></p>' . sprintf( __( 'Registration is currently turned off for your site, so the registration link will not show.  If you want the registration link to show please %sgo here%s to turn it on.', 'event_espresso' ), '<a href="' . admin_url( 'options-general.php' ) . '">', '</a>' ) . '</p></div>';
 
         return new EE_Form_Section_Proper(
             array(
@@ -216,7 +217,7 @@ class EED_Cert_Admin  extends EED_Module {
      * @return void
      */
     public static function update_cert_settings( EE_Admin_Page $admin_page ) {
-        $config = EE_Registry::instance()->CFG->addons->user_integration;
+        $config = EE_Registry::instance()->CFG->addons->cert;
         try {
             $form = self::_cert_settings_form();
             if ( $form->was_submitted() ) {
@@ -286,7 +287,7 @@ class EED_Cert_Admin  extends EED_Module {
     }
 
     /**
-     * Generate the event editor wp user settings form.
+     * Generate the event editor cert form.
      *
      * @return EE_Form_Section_Proper
      */
@@ -405,8 +406,7 @@ class EED_Cert_Admin  extends EED_Module {
     }
 
     /**
-     * Callback for AHEE__event_tickets_datetime_ticket_row_template__advanced_details_end.
-     * This is used to add the form to the tickets for the capabilities.
+     * This is used to add the form to the datetimes for the certs.
      *
      * @since 1.0.0
      * @param string|int $tkt_row This will either be the ticket row number for an existing ticket or
@@ -416,23 +416,22 @@ class EED_Cert_Admin  extends EED_Module {
      * @return string form for capabilities required.
      */
 
-    public static function insert_datetime_meta_interface( $datetime_row, $DTT_ID ) {
+    public static function insert_datetime_meta_interface( $dtt_row, $DTT_ID ) {
         //build our form and print.
-        echo self::_get_datetime_credits_form( $datetime_row, $DTT_ID )->get_html_and_js();
+        echo self::_get_datetime_credits_form( $dtt_row, $DTT_ID )->get_html_and_js();
     }
 
 
     /**
-     * Form generator for credits field on tickets.
+     * Form generator for credits field on datetimes.
      *
      * @since 1.0.0
      * @see EED_Cert_Admin::insert_datetime_meta_interface for params documentation
      *
      * @return string
      */
-    protected static function _get_datetime_credits_form( $datetime_row, $DTT_ID ) {
+    protected static function _get_datetime_credits_form( $dtt_row, $DTT_ID ) {
         $datetime = EE_Registry::instance()->load_model('Datetime')->get_one_by_ID( $DTT_ID );
-        $current_cap = $datetime instanceof EE_Datetime ? $datetime->get_extra_meta( 'ee_datetime_credits', true, '' ) : '';
 
         EE_Registry::instance()->load_helper( 'HTML' );
         return new EE_Form_Section_Proper(
@@ -459,23 +458,13 @@ class EED_Cert_Admin  extends EED_Module {
     }
 
     /**
-     * Callback for AHEE__espresso_events_Pricing_Hooks___update_tkts_new_ticket and
-     * AHEE__espresso_events_Pricing_Hooks___update_tkts_update_ticket.
-     * Used to hook into ticket saves so that we update any values for a ticket.
-     *
-     * @param EE_Ticket $tkt
-     * @param int         $tkt_row       The ticket row this ticket corresponds with (used for knowing
-     *                                          what form element to retrieve from).
-     * @param array | EE_Ticket   $tkt_form_data The original incoming ticket form data OR the original created EE_Ticket from that form data
-     *                                           depending on which hook this callback is called on.
-     * @param array    $all_form_data All incoming form data for ticket editor (includes datetime data)
-     *
-     * @return void      This is an action callback so returns are ignored.
+     * Callback for AHEE__espresso_events_Pricing_Hooks___update_dtts_update_datetime.
+     * Used to hook into datetime saves so that we update any values for a datetime.
      */
-    public static function update_credits_on_datetime( EE_Datetime $dtt, $datetime_row, $dtt_form_data, $all_form_data ) {
+    public static function update_credits_on_datetime( EE_Datetime $dtt, $dtt_row, $dtt_form_data, $all_form_data ) {
         try {
             $datetime_id = $dtt_form_data instanceof EE_Datetime ? $dtt_form_data->ID() : $dtt->ID();
-            $form = self::_get_datetime_credits_form( $datetime_row, $datetime_id );
+            $form = self::_get_datetime_credits_form( $dtt_row, $datetime_id );
             if ( $form->was_submitted() ) {
                 $form->receive_form_submission();
                 if ( $form->is_valid() ) {
