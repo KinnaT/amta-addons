@@ -1,109 +1,54 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) )
+    exit( 'No direct script access allowed' );
 /*
-  Plugin Name: Event Espresso - Cert (EE4.x+)
-  Plugin URI: http://www.eventespresso.com
-  Description: Event Espresso addon to allow creation of cert based on earned credits.
-  Version: 1.0.0
-  Author: Kinna Thompson
-  Author URI: https://www.twitter.com/real_kinna
-  Copyright 2016 Kinna Thompson (email : kinna3@outlook.com)
+  Plugin Name:     Event Espresso - Certificates (EE4.6+)
+  Plugin URI:     http://www.eventespresso.com
+  Description:     This adds the certificates integration.
+  Version:         2.0.11.p
+  Author:         Event Espresso
+  Author URI:     http://www.eventespresso.com
+  License:         GPLv2
+  TextDomain:     event_espresso
+  Copyright     (c) 2008-2014 Event Espresso  All Rights Reserved.
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License, version 2, as
-  published by the Free Software Foundation.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
- *
- * ------------------------------------------------------------------------
- *
- * Event Espresso
- *
- * Event Registration and Management Plugin for WordPress
- *
- * @ package        Event Espresso
- * @ author            Event Espresso
- * @ copyright    (c) 2008-2014 Event Espresso  All Rights Reserved.
- * @ license        http://eventespresso.com/support/terms-conditions/   * see Plugin Licensing *
- * @ link                http://www.eventespresso.com
- * @ version         EE4
- *
- * ------------------------------------------------------------------------
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-// define versions and this file
-define( 'EE_CERT_CORE_VERSION_REQUIRED', '4.8.0.rc.0000' );
-define( 'EE_CERT_VERSION', '1.0.0' );
-define( 'EE_CERT_PLUGIN_FILE',  __FILE__ );
-
-
-
 
 /**
- *    captures plugin activation errors for debugging
+ * EE Cert add-on for Event Espresso
+ * @since         1.0.0
+ * @package     EE CERT
+ *
  */
-function espresso_cert_plugin_activation_errors() {
+define( 'EE_CERT_VERSION', '2.0.11.p' );
+define( 'EE_CERT_MIN_CORE_VERSION_REQUIRED', '4.8.21.rc.005' );
+define( 'EE_CERT_PLUGIN_FILE', __FILE__ );
 
-    if ( WP_DEBUG ) {
-        $activation_errors = ob_get_contents();
-        file_put_contents( EVENT_ESPRESSO_UPLOAD_DIR . 'logs' . DS . 'espresso_cert_plugin_activation_errors.html', $activation_errors );
+
+function load_ee_core_cert() {
+    if ( class_exists( 'EE_Addon' ) ) {
+        // new_addon version
+        require_once ( plugin_dir_path( __FILE__ ) . 'EE_Cert.class.php' );
+        EE_Cert::register_addon();
     }
-}
-add_action( 'activated_plugin', 'espresso_cert_plugin_activation_errors' );
 
-
-
-/**
- *    registers addon with EE core
- */
-function load_espresso_cert() {
-  if ( class_exists( 'EE_Addon' )) {
-      // cert version
-      require_once ( plugin_dir_path( __FILE__ ) . 'EE_Cert.class.php' );
-      EE_Cert::register_addon();
-  } else {
-    add_action( 'admin_notices', 'espresso_cert_activation_error' );
-  }
-}
-add_action( 'AHEE__EE_System__load_espresso_addons', 'load_espresso_cert' );
-
-
-
-/**
- *    verifies that addon was activated
- */
-function espresso_cert_activation_check() {
-  if ( ! did_action( 'AHEE__EE_System__load_espresso_addons' ) ) {
-    add_action( 'admin_notices', 'espresso_cert_activation_error' );
-  }
-}
-add_action( 'init', 'espresso_cert_activation_check', 1 );
-
-
-
-/**
- *    displays activation error admin notice
- */
-function espresso_cert_activation_error() {
-  unset( $_GET[ 'activate' ] );
-  unset( $_REQUEST[ 'activate' ] );
-  if ( ! function_exists( 'deactivate_plugins' ) ) {
-    require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  }
-  deactivate_plugins( plugin_basename( EE_CERT_PLUGIN_FILE ) );
-  ?>
-  <div class="error">
-    <p><?php printf( __( 'Event Espresso Certificates could not be activated. Please ensure that Event Espresso version %1$s or higher is running', 'event_espresso' ), EE_CERT_CORE_VERSION_REQUIRED ); ?></p>
-  </div>
-<?php
 }
 
+add_action( 'AHEE__EE_System__load_espresso_addons', 'load_ee_core_cert' );
 
-
-// End of file espresso_cert.php
-// Location: wp-content/plugins/eea-cert/espresso_cert.php
+// End of file ee-addon-cert.php
+// Location: wp-content/plugins/ee4-cert/ee-addon-cert.php
