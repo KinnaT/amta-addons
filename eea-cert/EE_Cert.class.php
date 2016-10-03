@@ -49,10 +49,77 @@ class EE_CERT extends EE_Addon {
                     'pue_plugin_slug' => 'eea-cert-integration',
                     'checkPeriod' => '24',
                     'use_wp_update' => FALSE
+                ),
                 )
-            )
         );
     }
+    protected static function _add_message_type() {
+        add_action('EE_Brewing_Regular___messages_caf', array( $this, 'register_cert_message_type' ) );
+    }
+
+    public function register_cert_message_type() {
+            $setup_args = array(
+            mtfilename => 'EE_Cert_message_type.class.php',
+            'autoloadpaths' => array(
+            EE_CERT_PATH . 'messages/'
+            ),
+            'messengers_to_activate_with' => array( 'html' ),
+            'messengers_to_validate_with' => array( 'html' ),
+            'force_activation' => true
+        );
+    EE_Register_Message_Type::register( 'cert', $setup_args );
+    }
+
+    /**
+    * Takes care of adding all filters for template packs this message type connects with.
+    *
+    * @since 1.0.0
+    *
+    * @return void.
+    */
+    protected static function _add_template_pack_filters() {
+        add_filter( 'FHEE__EE_Messages_Template_Pack_Default__get_supports', array( 'EE_Cert', 'register_supports_for_default_template_pack' ), 10  );
+        add_filter( 'FHEE__EE_Template_Pack___get_specific_template__filtered_base_path', array( 'EE_Cert', 'register_base_path_for_cert_template' ), 10, 6 );
+        add_filter( 'FHEE__EE_Messages_Template_Pack__get_variation__base_path_or_url', array( 'EE_Cert', 'get_cert_css_path_or_url' ), 10, 8 );
+        add_filter( 'FHEE__EE_Messages_Template_Pack__get_variation__base_path', array( 'EE_Cert', 'get_cert_css_path_or_url' ), 10, 8 );
+    }
+
+
+        public static function register_base_path_for_cert_templates( $base_path, $messenger, $message_type, $field, $context, $template_pack ) {
+        if ( ! $template_pack instanceof EE_Messages_Template_Pack_Default || ! $message_type instanceof EE_Certificate_message_type ) {
+            return $base_path; //we're only setting up default templates for the default pack or for ticketing message type or ticket notice message type.
+        }
+
+        return EE_CERT_PATH . 'messages/templates/';
+    }
+
+
+
+
+    public static function get_ticketing_css_path_or_url( $base_path_or_url, $messenger, $message_type, $type, $variation, $url, $file_extension, $template_pack ) {
+        if ( ! $template_pack instanceof EE_Messages_Template_Pack_Default || $messenger != 'html' || $message_type != 'cert' ) {
+            return $base_path_or_url;
+        }
+
+        return  self::_get_ticketing_path_or_url( $url );
+    }
+        private static function _get_cert_path_or_url( $url = FALSE ) {
+        return $url ? EE_CERT_PATH . 'messages/templates/' : EE_CERT_PATH . 'messages/templates/';
+    }
+
+        /**
+     * Adds the ticketing message type to the supports array for the default template pack.
+     *
+     * @since %VER%
+     *
+     * @param array  $supports Original "supports" value for default template pack.
+     * @return array  new supports value.
+     */
+    public static function register_supports_for_default_template_pack( $supports ) {
+        $supports['html'][] = 'cert';
+        return $supports;
+    }
+
 
 
 
@@ -117,7 +184,7 @@ class EE_CERT extends EE_Addon {
      *
      * @return bool   true YES forced login turned on false NO forced login turned off.
      */
-    public static function is_event_force_login( $event ) {
+    public static function is_event_has_credits( $event ) {
         return self::_get_cert_event_setting( 'has_credits', $event );
     }
 
@@ -131,7 +198,7 @@ class EE_CERT extends EE_Addon {
      * @return mixed Whatever the value for the key is or what is set as the global default if it doesn't
      * exist.
      */
-    protected static function _get_Cert_event_setting( $key, $event ) {
+    protected static function _get_cert_event_setting( $key, $event ) {
         //any global defaults?
         $config = isset( EE_Registry::instance()->CFG->addons->cert ) ? EE_Registry::instance()->CFG->addons->cert : false;
         $global_default = array(

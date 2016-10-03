@@ -25,7 +25,7 @@ class EE_Cert_Config extends EE_Config_Base {
      * @since 1.0.0
      * @var bool
      */
-    public $force_login;
+    public $has_credits;
 
 
     /**
@@ -34,31 +34,7 @@ class EE_Cert_Config extends EE_Config_Base {
      * @since 1.1.3
      * @var
      */
-    public $registration_page;
-
-
-
-    /**
-     * Global default setting for whether a new cert is created on frontend when a registration has
-     * a new attendee (with new details).
-     *
-     * @since 1.0.0
-     * @var bool
-     */
-    public $auto_create_user;
-
-
-
-
-    /**
-     * Global default setting for what role a new cert is created as when auto created via frontend
-     * registration.
-     *
-     * @since 1.0.0
-     * @var string
-     */
-    public $default_cert_role;
-
+    public $ce_credits;
 
 
 
@@ -88,7 +64,7 @@ class EE_Cert_Config extends EE_Config_Base {
      *
      * @type bool
      */
-    public $sync_user_with_contact;
+    // public $sync_user_with_contact;
 
 
     /**
@@ -96,11 +72,8 @@ class EE_Cert_Config extends EE_Config_Base {
      * @since 1.0.0
      */
     public function __construct() {
-        $this->force_login = false;
-        $this->registration_page = '';
-        $this->auto_create_user = false;
-        $this->default_cert_role = 'subscriber';
-        $this->sync_user_with_contact = true;
+        $this->has_credits = false;
+        $this->ce_credits = '';
     }
 
 } //end EE_Certs_Config
