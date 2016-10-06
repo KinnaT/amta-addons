@@ -1,5 +1,5 @@
 <?php
-function leg_credits( $content) {
+function leg_credits() {
     if ( is_page( 5212 ) && is_user_logged_in() ) {
         function get_legacy_credits($output_type=OBJECT) {
             global $wpdb;
@@ -25,12 +25,14 @@ function leg_credits( $content) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($legacy_credits as $legacy_credit) { ?>
+                        <?php foreach($legacy_credits as $legacy_credit) {
+                        $credit = $legacy_credit->credits_id;
+                         ?>
                         <tr class="espresso-table-row unit legacy-credits-body" style="display: table-row;">
-                            <td class="event-<?php echo $legacy_credit->credits_id ?> legacy-credits-date"><?php echo $legacy_credit->entry_date ?></td>
-                            <td class="event-<?php echo $legacy_credit->credits_id ?> legacy-credits-event"><?php echo $legacy_credit->details ?></td>
-                            <td class="event-<?php echo $legacy_credit->credits_id ?> legacy-credits-credits"><?php echo $legacy_credit->credits ?></td>
-                            <td class="legacy-credits-cert"><a id="a_register_link-7831" class="a_cert_link" href="#">View Certificate</a></td>
+                            <td class="event-<?php echo $credit ?> legacy-credits-date"><?php echo $legacy_credit->entry_date ?></td>
+                            <td class="event-<?php echo $credit ?> legacy-credits-event"><?php echo $legacy_credit->details ?></td>
+                            <td class="event-<?php echo $credit ?> legacy-credits-credits"><?php echo $legacy_credit->credits ?></td>
+                            <td class="legacy-credits-cert"><a id="a_leg_cert_link-<?php echo $credit ?>" class="a_cert_link" href="http://127.0.0.1/wordpress/?page_id=5958&credits_id=<?php echo $credit ?>" target="_blank">View Certificate</a></td>
                         </tr>
                         <?php    } ?>
                     </tbody>
