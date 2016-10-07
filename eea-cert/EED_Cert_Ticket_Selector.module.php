@@ -15,7 +15,7 @@ if ( ! defined('EVENT_ESPRESSO_VERSION')) exit('No direct script access allowed'
  *
  * @package        EE Certificates
  * @subpackage    modules
- * @author         Darren Ethier
+ * @author         Kinna Thompson
  *
  * ------------------------------------------------------------------------
  */

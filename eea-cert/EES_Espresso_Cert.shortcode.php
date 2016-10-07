@@ -4,7 +4,7 @@
  *
  * @package            Event Espresso
  * @subpackage        /shortcodes/
- * @author            Darren Ethier
+ * @author            Kinna Thompson
  * @since           4.6.29
  *
  * ------------------------------------------------------------------------

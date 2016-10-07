@@ -42,7 +42,7 @@ class EE_CERT extends EE_Addon {
                 'autoloader_paths' => array(
                     'EE_Cert_Config' => EE_CERT_PATH . 'EE_Cert_Config.php',
                     // 'EE_SPCO_Reg_Step_Cert_Login' => EE_CERT_PATH . 'EE_SPCO_Reg_Step_cert_Login.class.php',
-                    'EE_DMS_2_0_0_user_option' => EE_CERT_PATH . 'core/data_migration_scripts/2_0_0_stages/EE_DMS_2_0_0_user_option.dmsstage.php'
+                    // 'EE_DMS_2_0_0_user_option' => EE_CERT_PATH . 'core/data_migration_scripts/2_0_0_stages/EE_DMS_2_0_0_user_option.dmsstage.php'
                     ),
                 // if plugin update engine is being used for auto-updates. not needed if PUE is not being used.
                 'pue_options' => array(
@@ -96,19 +96,19 @@ class EE_CERT extends EE_Addon {
 
 
 
-    public static function get_ticketing_css_path_or_url( $base_path_or_url, $messenger, $message_type, $type, $variation, $url, $file_extension, $template_pack ) {
+    public static function get_cert_css_path_or_url( $base_path_or_url, $messenger, $message_type, $type, $variation, $url, $file_extension, $template_pack ) {
         if ( ! $template_pack instanceof EE_Messages_Template_Pack_Default || $messenger != 'html' || $message_type != 'cert' ) {
             return $base_path_or_url;
         }
 
-        return  self::_get_ticketing_path_or_url( $url );
+        return  self::_get_cert_path_or_url( $url );
     }
         private static function _get_cert_path_or_url( $url = FALSE ) {
         return $url ? EE_CERT_PATH . 'messages/templates/' : EE_CERT_PATH . 'messages/templates/';
     }
 
         /**
-     * Adds the ticketing message type to the supports array for the default template pack.
+     * Adds the cert message type to the supports array for the default template pack.
      *
      * @since %VER%
      *

@@ -38,6 +38,12 @@ function kinna_add_nf_styles( ) {
     }
 
 add_action ( 'ninja_forms_display_css', 'kinna_add_nf_styles' );
+function add_query_vars_filter( $vars ){
+    $vars[] = "credits_id";
+    return $vars;
+}
+add_filter( 'query_vars', 'add_query_vars_filter' );
+
 
 // remove "powered by Event Espresso" admin footer text
 add_filter( 'admin_footer_text', 'ee_remove_footer_text', 11 );
@@ -304,3 +310,4 @@ function my_question_input( $input_args, EE_Registration $registration = null, E
     }
     return $input_args;
 }
+

@@ -15,7 +15,7 @@ if ( ! defined( 'EVENT_ESPRESSO_VERSION' )) { exit('NO direct script access allo
  *
  * @package EE Certs
  * @subpackage config
- * @author Darren Ethier
+ * @author Kinna Thompson
  */
 class EE_Cert_Config extends EE_Config_Base {
 

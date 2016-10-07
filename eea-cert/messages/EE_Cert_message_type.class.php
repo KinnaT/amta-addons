@@ -38,9 +38,6 @@ class EE_Certificate_message_type extends EE_message_type {
        // $this->_single_message = $this->_data instanceof EE_Registration ? true : false;
     }
 
-
-
-
     protected function _get_data_for_context( $context, EE_Registration $registration, $id ) {
         return $registration;
     }
@@ -73,7 +70,7 @@ class EE_Certificate_message_type extends EE_message_type {
             'recipient_details', 'organization', 'event', 'ticket', 'venue', 'primary_registration_details', 'event_author', 'email','event_meta', 'recipient_list', 'datetime_list', 'question_list', 'datetime', 'question'
             );
 
-        //add shortcodes to the single 'registrant' context we have for the ticketing message type
+        //add shortcodes to the single 'registrant' context we have for the cert message type
         $this->_valid_shortcodes['registrant'] = $included_shortcodes;
 
     }
