@@ -44,17 +44,7 @@ $pagination_html = EEH_Template::get_paging_html(
             <th scope="col" class="espresso-my-events-event-th">
                 <?php echo apply_filters(
                     'FHEE__loop-espresso_my_events__table_header_event',
-                    esc_html__( 'Title', 'event_espresso' ),
-                    $object_type,
-                    $objects,
-                    $template_slug,
-                    $att_id
-                ); ?>
-            </th>
-            <th scope="col" class="espresso-my-events-location-th">
-                <?php echo apply_filters(
-                    'FHEE__loop-espresso_my_events__location_table_header',
-                    esc_html__( 'Location', 'event_espresso' ),
+                    esc_html__( 'Event', 'event_espresso' ),
                     $object_type,
                     $objects,
                     $template_slug,
@@ -64,7 +54,7 @@ $pagination_html = EEH_Template::get_paging_html(
             <th scope="col" class="espresso-my-events-datetime-range-th">
                 <?php echo apply_filters(
                     'FHEE__loop-espresso_my_events__datetime_range_table_header',
-                    esc_html__( 'When', 'event_espresso' ),
+                    esc_html__( 'Date', 'event_espresso' ),
                     $object_type,
                     $objects,
                     $template_slug,
@@ -74,7 +64,7 @@ $pagination_html = EEH_Template::get_paging_html(
             <th scope="col" class="espresso-my-events-tickets-num-th">
                 <?php echo apply_filters(
                     'FHEE__loop-espresso_my_events__tickets_num_table_header',
-                    esc_html__( '# Registrations', 'event_espresso' ),
+                    esc_html__( 'Num. Registrations', 'event_espresso' ),
                     $object_type,
                     $objects,
                     $template_slug,
@@ -84,7 +74,7 @@ $pagination_html = EEH_Template::get_paging_html(
             <th scope="col" class="espresso-my-events-actions-th">
                 <?php echo apply_filters(
                     'FHEE__loop-espresso_my_events__actions_table_header',
-                    esc_html__( 'Actions', 'event_espresso' ),
+                    esc_html__( 'Details & Actions', 'event_espresso' ),
                     $object_type,
                     $objects,
                     $template_slug,
@@ -109,9 +99,9 @@ $pagination_html = EEH_Template::get_paging_html(
         <div class="espresso-my-events-pagination-container <?php echo $template_slug;?>-pagination">
             <span class="spinner"></span>
             <?php echo $pagination_html; ?>
-            <div style="clear:both"></div>
+            <div style="clear: both"></div>
         </div>
-        <div style="clear:both"></div>
+        <div style="clear: both"></div>
         <?php EEH_Template::locate_template( 'status-legend-espresso_my_events.template.php', array( 'template_slug' => $template_slug ), true, false ); ?>
     </div>
 <?php else : ?>
@@ -132,3 +122,51 @@ $pagination_html = EEH_Template::get_paging_html(
     <?php do_action( 'AHEE__loop-espresso_my_events__after', $object_type, $objects, $template_slug, $att_id ); ?>
     </div>
 <?php endif; //end $wrapper check?>
+<?php if( is_user_logged_in() ) {
+function get_legacy_credits($output_type=OBJECT) {
+global $wpdb;
+global $current_user;
+get_currentuserinfo();
+$user = $current_user->user_login;
+$leg_table  = $wpdb->prefix . 'ce_credits';
+return $wpdb->get_results("SELECT * FROM {$leg_table} WHERE `username` = '$user'", OBJECT);
+}
+$legacy_credits = get_legacy_credits();
+// print_r($legacy_credits);
+if (!empty($legacy_credits)) :
+?>
+<div class="legacy-credits">
+    <h3>CE Credits Earned Prior to October 2016</h3>
+    <?php // print_r($legacy_credits); ?>
+    <table id="legacy-credits-table" class="espresso-table footable table footable-loaded" data-filter="#filter">
+        <thead class="espresso-table-header-row">
+            <tr>
+                <th class="th-group footable-sortable legacy-credits-date">Date<span class="footable-sort-indicator"></span></th>
+                <th class="th-group footable-sortable">Event<span class="footable-sort-indicator"></span></th>
+                <th class="th-group footable-sortable">Credits<span class="footable-sort-indicator"></span></th>
+                <th class="th-group" data-sort-ignore="true"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($legacy_credits as $legacy_credit) {
+                $credit = $legacy_credit->credits_id;
+            ?>
+            <tr class="espresso-table-row unit legacy-credits-body" style="display: table-row;">
+                <td class="event-<?php echo $credit ?> legacy-credits-date"><?php echo $legacy_credit->start_date ?></td>
+                <td class="event-<?php echo $credit ?> legacy-credits-event"><?php echo $legacy_credit->details ?></td>
+                <td class="event-<?php echo $credit ?> legacy-credits-credits"><?php echo $legacy_credit->credits ?></td>
+                <td class="legacy-credits-cert"><a id="a_leg_cert_link-<?php echo $credit ?>" class="a_cert_link" href="https://amtanewyork.org/view-legacy-certificate/?credits_id=<?php echo $credit ?>" target="_blank">View Certificate</a></td>
+            </tr>
+            <?php    } ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+<?php endif;
+            }
+?>

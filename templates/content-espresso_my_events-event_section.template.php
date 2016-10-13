@@ -21,9 +21,6 @@ $registrations = $event->get_many_related('Registration', array( array( 'ATT_ID'
         <?php echo count( $registrations ); ?>
     </td>
     <td>
-        <?php ?>
-    </td>
-    <td>
         <span class="dashicons dashicons-admin-generic js-ee-my-events-toggle-details"></span>
     </td>
 </tr>
@@ -43,26 +40,6 @@ $registrations = $event->get_many_related('Registration', array( array( 'ATT_ID'
                 ?>
                 <?php echo apply_filters( 'the_content', $event->description() ); ?>
             </section>
-            <?php
-            /**
-             * For now this will just grab the first venue related to the event.  However when we move to multiple venues
-             * per event and/or datetime, this could be modified to have the map show all venues and then list them in the right section
-             */
-            $venue = reset( $venues );
-            if ( $venue instanceof EE_Venue ) :
-            ?>
-                <section class="ee-my-events-event-section-location-map ee-my-events-one-third">
-                    <?php
-                        EE_Registry::instance()->load_Helper( 'Venue_View' );
-                        echo EEH_Venue_View::espresso_google_static_map( $venue );
-                    ?>
-                </section>
-                <section class="ee-my-events-event-section-location-details ee-my-events-two-thirds">
-                    <strong><?php echo $venue->name(); ?></strong>
-                    <?php echo EEH_Venue_View::venue_address( 'multiline', $venue->ID() ); ?>
-                </section>
-                <div style="clear:both"></div>
-            <?php endif; //end venue check ?>
             <section class="ee-my-events-event-section-tickets-list-table-container">
                 <h3><?php echo $your_tickets_title; ?></h3>
                 <?php if ( $registrations ) : ?>
@@ -82,6 +59,13 @@ $registrations = $event->get_many_related('Registration', array( array( 'ATT_ID'
                                     <?php echo apply_filters(
                                         'FHEE__content-espresso_my_events__table_header_datetimes',
                                         esc_html__( 'Dates & Times', 'event_espresso' ),
+                                        $event
+                                    ); ?>
+                                </th>
+                                <th scope="col" class="espresso-my-events-credits-th">
+                                    <?php echo apply_filters(
+                                        'FHEE__content-espresso_my_events__table_header_credits',
+                                        esc_html__( 'Credits Earned', 'event_espresso' ),
                                         $event
                                     ); ?>
                                 </th>

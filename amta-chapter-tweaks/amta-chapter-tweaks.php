@@ -45,6 +45,7 @@ function add_query_vars_filter( $vars ){
 add_filter( 'query_vars', 'add_query_vars_filter' );
 
 
+
 // remove "powered by Event Espresso" admin footer text
 add_filter( 'admin_footer_text', 'ee_remove_footer_text', 11 );
 function ee_remove_footer_text() {
