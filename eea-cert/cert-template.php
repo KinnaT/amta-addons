@@ -40,7 +40,7 @@ if( is_user_logged_in() ) {
                 <tr>
                     <td height="100" width="300"><img src="https://amtanewyork.org/wp-content/uploads/2016/09/AMTA-New-York-Website-Dark-300.png" height="100" width="300"><br>
                     </td>
-                    <td style="height: 150px; padding: 0px; text-align: right;"><b>American Massage Therapy Association<br>
+                    <td id="cert_company" style="height: 150px; padding: 0px; text-align: right;"><b>American Massage Therapy Association<br>
                         </b>New York Chapter<br>
                         167 Chamberlain Rd<br>
                         Honeoye Falls, NY 14472<br>
@@ -131,9 +131,10 @@ if( is_user_logged_in() ) {
             </tbody>
         </table>
     </div>
+<div class="test">
+<h3>This is only a test.</h3>
 </div>
 <?php } else { ?>
 <h2 style="text-align: center; margin-top: 15px; font-family: Helvetica, sans-serif;">Please log in again in order to view your certificate.</h2>
        <input type="button" onclick="self.open('', '_self', ''); self.close();" id="btnClose" class="formbutton printbuttons" value="Click to close" style="height: 30px; width: 130px; font-size: 16px; display: block; margin: 0 auto;"/>
 <?php } ?>
-<!--END_OF_FILE-->

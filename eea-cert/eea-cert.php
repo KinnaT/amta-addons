@@ -22,10 +22,6 @@ if ( ! defined( 'ABSPATH' ) )
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 /**
@@ -41,7 +37,6 @@ define( 'EE_CERT_PLUGIN_FILE', __FILE__ );
 
 function load_ee_core_cert() {
     if ( class_exists( 'EE_Addon' ) ) {
-        // new_addon version
         require_once ( plugin_dir_path( __FILE__ ) . 'EE_Cert.class.php' );
         EE_Cert::register_addon();
     }
@@ -49,6 +44,7 @@ function load_ee_core_cert() {
 
 add_action( 'AHEE__EE_System__load_espresso_addons', 'load_ee_core_cert' );
 
+// This handles all of the actual certificate creation, as the cert is a page unto itself, handled with GET to carry over the selected certificate's ID.
 class PageTemplater {
         private static $instance;
         protected $templates;

@@ -1,3 +1,18 @@
+select#cat {
+    margin-left: 6px;
+}
+.widget_sub_nav ul a, .widget_nav_menu ul a, .widget_pages ul a {
+    padding: 4px 12px !important;
+}
+.widget_sub_nav li:first-child, .widget_nav_menu li:first-child, .widget_pages ul li:first-child {
+    border-top: 0px !important;
+}
+.widget_sub_nav ul li, .widget_nav_menu ul li, .widget_pages ul li {
+     border-bottom: 1px solid #f5f5f5;
+}
+.widget-title {
+    margin: 0 0 10px 0 !important;
+}
 .footable {
     border-collapse: collapse;
     border-radius: 0px;
