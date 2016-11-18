@@ -56,6 +56,13 @@ class EE_CERT extends EE_Addon {
         }
     }
 
+        public function plugin_actions( $links, $file ) {
+        if ( $file === EE_CERT_BASENAME ) {
+            array_unshift( $links, '<a href="admin.php?page=espresso_cert&action=settings">' . __('Settings') . '</a>' );
+        }
+        return $links;
+    }
+
     public static function get_attendee_user( $att_id ) {
         global $wpdb;
         $key = $wpdb->get_blog_prefix() . 'EE_Attendee_ID';

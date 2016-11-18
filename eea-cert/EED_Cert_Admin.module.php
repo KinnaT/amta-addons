@@ -24,9 +24,9 @@ add_action( 'admin_enqueue_scripts', array( 'EED_Cert_Admin', 'admin_enqueue_scr
 // add_filter( 'FHEE__Extend_Registration_Form_Admin_Page__page_setup__page_config', array( 'EED_Cert_Admin', 'add_cert_default_settings_config' ), 10, 2 );
 
 //hooking into event editor
-// add_action( 'add_meta_boxes', array( 'EED_Cert_Admin', 'add_metaboxes' ) );
+add_action( 'add_meta_boxes', array( 'EED_Cert_Admin', 'add_metaboxes' ) );
 add_filter( 'FHEE__Events_Admin_Page___insert_update_cpt_item__event_update_callbacks', array( 'EED_Cert_Admin', 'set_callback_save_cert_event_setting' ), 10, 2 );
-// add_filter( 'FHEE__EED_Cert_Admin__event_editor_metabox__cert_form_content', array( 'EED_Cert_Admin', 'set_credits_default_event_editor' ), 10 );
+add_filter( 'FHEE__EED_Cert_Admin__event_editor_metabox__cert_form_content', array( 'EED_Cert_Admin', 'set_credits_default_event_editor' ), 10 );
 
 //hook into ticket editor in event editor.
 add_action('AHEE__event_tickets_datetime_ticket_row_template__advanced_details_end', array('EED_Cert_Admin', 'insert_ticket_credit_meta_interface'), 10, 2);
@@ -43,21 +43,25 @@ wp_register_style('ee-admin-css', EE_ADMIN_URL . 'assets/ee-admin-page.css', arr
 wp_register_style('espresso_att', REG_ASSETS_URL . 'espresso_attendees_admin.css', array('ee-admin-css'), EVENT_ESPRESSO_VERSION );
 wp_enqueue_style('espresso_att');
 }
+if ( get_current_screen()->id == 'espresso_events' ) {
+    wp_register_script('bokeh', EE_CERT_URL . 'bokeh.js', array(), EVENT_ESPRESSO_VERSION);
+    wp_enqueue_script('bokeh');
+}
 }
 
 public function run( $WP ) {}
 
 
 //Register metaboxes for event editor. Can be useful later to create blanket CE values that apply to ALL tickets created for this event
-/*public static function add_metaboxes() {
+public static function add_metaboxes() {
 $page = EE_Registry::instance()->REQ->get( 'page' );
-$route = EE_Registry::instance()->REQ->get( 'action' );*/
+$route = EE_Registry::instance()->REQ->get( 'action' );
 
 // on event editor page?
-/*if ( $page == 'espresso_events' && ( $route == 'edit' || $route == 'create_new' ) ) {
-add_meta_box( 'eea_cert', __('Certificates Settings', 'event_espresso' ), array( 'EED_Cert_Admin', 'event_editor_metabox' ), null, 'side', 'default' );
+if ( $page == 'espresso_events' && ( $route == 'edit' || $route == 'create_new' ) ) {
+add_meta_box( 'eea_cert', __('CE Credit Settings', 'event_espresso' ), array( 'EED_Cert_Admin', 'event_editor_metabox' ), null, 'side', 'high' );
 }
-}*/
+}
 
 
     /**
@@ -114,16 +118,15 @@ $admin_page->redirect_after_action( false, '', '', array( 'action' => 'cert_sett
 /**
 * This is the metabox content for the certificates integration in the event editor.
 */
-/*public static function event_editor_metabox( $post, $metabox ) {
-echo self::_get_event_editor_cert_form( $post )->get_html_and_js();
-}*/
+public static function event_editor_metabox( $post, $metabox ) {
+echo "<div><h4 style=\"color: #800000; position: absolute; display: inline; margin: 0 auto; width: 95%;\" >In order to set CE credit values for this event, you must add it to the Advanced Settings for tickets.<br/><span style=\"font-weight: normal; color: #000;\">This is on a per ticket basis.</span></h4><canvas id=\"bokeh\"></canvas></div>";
+}
 
 
     /**
      * Generate the event editor cert settings form
      */
     protected static function _get_event_editor_cert_form( $post ) {
-        global $wp_roles;
         $evt_id = $post instanceof EE_Event ? $post->ID() : null;
         $evt_id = empty( $evt_id ) &&  isset( $post->ID ) ? $post->ID : 0;
         EE_Registry::instance()->load_helper( 'HTML' );

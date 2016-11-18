@@ -33,8 +33,6 @@ add_action( 'admin_enqueue_scripts', 'theme_name_scripts' );
 
 function kinna_add_nf_styles( ) {
     wp_enqueue_style( 'kinna-nf-css', WP_CONTENT_URL . '/plugins/amta-chapter-tweaks/form-styling.css' );
-    wp_enqueue_style( 'ny-styling-css', WP_CONTENT_URL . '/plugins/amta-chapter-tweaks/ny-styling.css' );
-    wp_enqueue_style( 'ny-extra-css', WP_CONTENT_URL. '/plugins/amta-chapter-tweaks/extras.css' );
     }
 
 add_action ( 'ninja_forms_display_css', 'kinna_add_nf_styles' );
@@ -44,15 +42,36 @@ function add_query_vars_filter( $vars ){
 }
 add_filter( 'query_vars', 'add_query_vars_filter' );
 
+/*
+ *
+ * CONTENT DISPLAY TWEAKS FOR EE4
+ *
+ * */
 
-
-// remove "powered by Event Espresso" admin footer text
+/* Removes "powered by Event Espresso" admin footer text */
 add_filter( 'admin_footer_text', 'ee_remove_footer_text', 11 );
 function ee_remove_footer_text() {
     remove_filter( 'admin_footer_text', array( 'EE_Admin', 'espresso_admin_footer' ), 10 );
 }
+
+/* Prints a message regarding the duration of the event. */
+add_action( 'AHEE__ticket_selector_chart__template__before_ticket_selector', 'ee_print_event_duration', 10 );
+function ee_print_event_duration( $event ) {
+    $datetimes = $event->datetimes();
+    foreach($datetimes as $datetime){
+        if ( $datetime instanceof EE_Datetime ) {
+            $start = $datetime->get_raw('DTT_EVT_start');
+            $end = $datetime->get_raw('DTT_EVT_end');
+            $diff = $end - $start;
+            $hours = $diff / 3600;
+            echo '<div><strong>This event is ' . $hours . ' hours in duration</strong></div>';
+        }
+    }
+}
+
 /**
- * Filter the event archive (and event taxonomy archive) pages so that they exclude events that have tickets no longer on sale  */
+ * Filters the event archive pages so they exclude events that have tickets no longer on sale
+ * */
 function de_ee_tweak_event_list_exclude_ticket_expired_events_where( $SQL, WP_Query $wp_query ) {
     if ( isset( $wp_query->query_vars['post_type'] ) && ( $wp_query->query_vars['post_type'] == 'espresso_events'  || ( is_array( $wp_query->query_vars['post_type'] ) && in_array( 'espresso_events', $wp_query->query_vars['post_type'] ) ) ) && ! $wp_query->is_singular ) {
         $SQL .= ' AND Ticket.TKT_end_date > "' . current_time( 'mysql', true ) . '" AND Ticket.TKT_deleted=0';
@@ -71,7 +90,9 @@ function de_ee_tweak_event_list_exclude_ticket_expired_events_join( $SQL, $wp_qu
 }
 add_filter( 'posts_join', 'de_ee_tweak_event_list_exclude_ticket_expired_events_join', 3, 2 );
 
-//* Exclude certain events from the events calendar for Event Espresso
+/*
+ * Excludes certain events from the events calendar for EE4
+ */
 function ee_hide_certain_event_statuses_from_events_calendar( $public_event_stati ) {
             unset( $public_event_stati[ EEM_Event::sold_out ] );
             unset( $public_event_stati[ EEM_Event::postponed ] );
@@ -80,9 +101,10 @@ function ee_hide_certain_event_statuses_from_events_calendar( $public_event_stat
         }
 add_filter( 'AFEE__EED_Espresso_Calendar__get_calendar_events__public_event_stati', 'ee_hide_certain_event_statuses_from_events_calendar', 10, 1 );
 
-// Affects the month view of the calendar so that if there are multiple datetimes for a single event on the same day, only one will appear in the calendar. Week and day views are unaffected
-//*** requires a server running PHP 5.5 or higher ***
-/*add_filter( 'FHEE__EED_Espresso_Calendar__get_calendar_events__query_params', 'ee_calendar_group_by_day', 10, 7 );
+/*
+ * Affects the month view of the calendar so that if there are multiple datetimes for a single event on the same day, only one will appear in the calendar. Week and day views are unaffected.
+ */
+add_filter( 'FHEE__EED_Espresso_Calendar__get_calendar_events__query_params', 'ee_calendar_group_by_day', 10, 7 );
 function ee_calendar_group_by_day( $query_params,
         $category_id_or_slug,
         $venue_id_or_slug,
@@ -109,12 +131,17 @@ function ee_calendar_group_by_day( $query_params,
         array(
             'DTT_ID' => array( 'IN', $ids_only ) ),
             'limit' => count( $ids_only ) );
-}*/
+}
 
 /*
- * Modifies the WP User Integration add-on for EE4 to create a new user account for each attendee within a transaction
- * What if the person doing the registration is logged in? New user accounts will be created for additional registrations **only**.
- * What happens if there is already a user account matching the email address for one of the registrations? By default, it will not allow the registration to proceed and they will be prompted to use a different email address or log in.
+ *
+ * WP USER INTEGRATION TWEAKS FOR EE4
+ *
+ * */
+
+/*
+ * Creates a new user account for each attendee within a transaction.
+ * If the person doing the registration is logged in, new user accounts will be created for additional registrations only
  */
 
 function plugin_ee_wpuser_for_attendee_set_hooks() {
@@ -137,10 +164,10 @@ function jf_ee_process_wpuser_for_attendee( EE_SPCO_Reg_Step_Attendee_Informatio
             $att_id = '';
             $attendee = $registration->attendee();
             if ( ! $attendee instanceof EE_Attendee ) {
-                //should always be an attendee, but if not we continue just to prevent errors.
+                // Should always be an attendee, but if not we continue just to prevent errors.
                 continue;
            }
-            //if user logged in, then let's just use that user.  Otherwise we'll attempt to get a user via the attendee info.
+            // If user logged in, then let's just use that user.  Otherwise we'll attempt to get a user via the attendee info.
             if ( is_user_logged_in() && $registration->is_primary_registrant() ) {
                 $user = get_userdata( get_current_user_id() );
             } else {
@@ -153,14 +180,14 @@ function jf_ee_process_wpuser_for_attendee( EE_SPCO_Reg_Step_Attendee_Informatio
                 }
             }
             $event = $registration->event();
-            //no existing user? then we'll create the user from the date in the attendee form.
+            // No existing user? then we'll create the user from the date in the attendee form.
             if ( ! $user instanceof WP_User ) {
-                //if this event does NOT allow automatic user creation then let's bail.
+                // If this event does NOT allow automatic user creation then let's bail.
                 if ( ! EE_WPUsers::is_auto_user_create_on( $event ) ) {
-                    return; //no we do NOT auto create users please.
+                    return;
                 }
                 $password = wp_generate_password( 12, false );
-                //remove our action for creating contacts on creating user because we don't want to loop!
+                // Remove our action for creating contacts on creating user because we don't want to loop!
                 remove_action( 'user_register', array( 'EED_WP_Users_Admin', 'sync_with_contact' ) );
                 $user_id = wp_create_user(
                     apply_filters(
@@ -174,14 +201,14 @@ function jf_ee_process_wpuser_for_attendee( EE_SPCO_Reg_Step_Attendee_Informatio
                 );
                 $user_created = true;
                 if ( $user_id instanceof WP_Error ) {
-                    continue; //get out because something went wrong with creating the user.
+                    continue; // Get out because something went wrong with creating the user.
                 }
                 $user = new WP_User( $user_id );
                 update_user_option( $user->ID, 'description', apply_filters( 'FHEE__EED_WP_Users_SPCO__process_wpuser_for_attendee__user_description_field', __( 'Registered via event registration form', 'event_espresso' ), $user, $attendee, $registration ) );
             }
-            // only do the below if syncing is enabled.
+            // Only do the below if syncing is enabled.
             if ( $user_created || EE_Registry::instance()->CFG->addons->user_integration->sync_user_with_contact ) {
-                //remove our existing action for updating users via saves in the admin to prevent recursion
+                // Remove our existing action for updating users via saves in the admin to prevent recursion
                 remove_action( 'profile_update', array( 'EED_WP_Users_Admin', 'sync_with_contact' ) );
                 wp_update_user(
                     array(
@@ -193,16 +220,15 @@ function jf_ee_process_wpuser_for_attendee( EE_SPCO_Reg_Step_Attendee_Informatio
                     )
                 );
             }
-            //if user created then send notification and attach attendee to user
+            // If user gets created then send notification and attach attendee to user
             if ( $user_created ) {
                 do_action( 'AHEE__EED_WP_Users_SPCO__process_wpuser_for_attendee__user_user_created', $user, $attendee, $registration, $password );
-                //set user role
                 $user->set_role( EE_WPUsers::default_user_create_role( $event ) );
                 update_user_option( $user->ID, 'EE_Attendee_ID', $attendee->ID() );
             } else {
                 do_action( 'AHEE__EED_WP_Users_SPCO__process_wpuser_for_attendee__user_user_updated', $user, $attendee, $registration );
             }
-          //failsafe just in case this is a logged in user not created by this system that has never had an attendee record.
+          // Failsafe in case this is a logged in user not created by this system that has never had an attendee record.
             $att_id = empty( $att_id ) ? get_user_option( 'EE_Attendee_ID', $user->ID ) : $att_id;
             if ( empty( $att_id ) && (EE_Registry::instance()->CFG->addons->user_integration->sync_user_with_contact
             || (
@@ -212,13 +238,13 @@ function jf_ee_process_wpuser_for_attendee( EE_SPCO_Reg_Step_Attendee_Informatio
             ) ) ) {
                 update_user_option( $user->ID, 'EE_Attendee_ID', $attendee->ID() );
             }
-        } //end registrations loop
+        } // End registrations loop
     }
 }
 
 
 /**
- * Extends the Event Espresso WP User integration addon to poplulate the user's stored System Address questions too
+ * Populates the user's stored System Address questions too
  */
 add_filter( 'FHEE__EEM_Answer__get_attendee_question_answer_value__answer_value', 'jf_filter_address_answer_for_wpuser', 10, 4 );
 function jf_filter_address_answer_for_wpuser( $value, EE_Registration $registration, $question_id, $system_id = null ) {
@@ -276,7 +302,7 @@ function jf_filter_address_answer_for_wpuser( $value, EE_Registration $registrat
 }
 
 /**
- * Extends the Event Espresso WP User integration addon, so that we also remember the user's last answer to custom questions too.
+ * Remembers the user's last answer to custom questions too.
  */
 add_filter('FHEE__EE_SPCO_Reg_Step_Attendee_Information___generate_question_input__input_constructor_args', 'my_question_input', 10, 4);
 function my_question_input( $input_args, EE_Registration $registration = null, EE_Question $question = null, EE_Answer $answer = null ) {

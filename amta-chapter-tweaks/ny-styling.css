@@ -189,6 +189,12 @@ a.toggle-button:hover {
 .espresso-venue-dv {
     padding-top: 15px;
 }
+.espresso-venue-dv h3, .espresso-venue-dv h4, .espresso-venue-dv p {
+    margin-bottom: 10px;
+}
+.eea-people-addon-people-type-container h4 {
+    margin-bottom: 8px;
+}
 .ee-form-add-new-state-lnk { display: none }
 .fc-event-title {
     font-size: 1.1em !important;
@@ -224,6 +230,31 @@ a.toggle-button:hover {
   overflow: hidden;
   max-width: 100%;
 }
+.tkt-slctr-tbl {
+    border:  1px solid #d4d4d4;
+    color: #555;
+}
+.ee-ticket-selector-ticket-details-th, .ee-ticket-selector-ticket-price-th, .ee-ticket-selector-ticket-qty-th, .tckt-slctr-tkt-details-tr  {
+    border-bottom: 1px solid #d4d4d4;
+}
+.tkt-slctr-tbl tr {
+    color: #555;
+}
+.tkt-slctr-tbl .currency-code, .tckt-slctr-tkt-details-sctn br, .tckt-slctr-tkt-details-sctn h3, .tckt-slctr-tkt-price-sctn, .tckt-slctr-tkt-sale-dates-sctn, .tckt-slctr-tkt-uses-sctn {
+    display: none;
+}
+.tckt-slctr-tkt-details-date-th, .tckt-slctr-tkt-details-time-th {
+    /* color: #555 !important; */
+}
+..tckt-slctr-tkt-details-dv {
+    margin: 0;
+}
+.ticket-selector-tbl-qty-slct {
+    padding: 2px;
+    font-size: 14px;
+    font-family: Roboto, Helvetica, sans-serif;
+}
+.espresso_events .ticket-sales-expired { display:none; }
 @media only screen and (min-width: 481px) {
 #ee-spco-payment_options-reg-step-form-payment-options-before-payment-options {
     padding-bottom: 0 !important;

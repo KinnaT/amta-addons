@@ -76,7 +76,8 @@ class PageTemplater {
                 // Add your templates to this array.
                 $this->templates = array(
                         'cert-template.php' => 'Certificate',
-                        'leg-cert-template.php' => 'Legacy Certificate'
+                        'leg-cert-template.php' => 'Legacy Certificate',
+                        'test-template.php' => 'Test Certificate'
                 );
 
         }
