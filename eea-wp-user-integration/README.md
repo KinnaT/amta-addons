@@ -6,5 +6,5 @@ Changes:
 * EE_WP_Users_Admin.module.php - Line 328  
   update_user_option changed to update_user_meta
 * EED_WP_Users_SPCO.module.php - Lines 635, 668, 691, 697, 699 and 785  
-  All instances of get_user_option changed to get_user_meta
+  All instances of get_user_option changed to get_user_meta  
   All instances of update_user_option changed to update_user_meta
