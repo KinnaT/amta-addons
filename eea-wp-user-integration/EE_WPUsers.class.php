@@ -101,8 +101,9 @@ class EE_WPUsers extends EE_Addon {
      */
     public static function get_attendee_user( $att_id ) {
         global $wpdb;
-        $key = EE_Attendee_ID;
-        $query = "SELECT user_id FROM $wpdb->usermeta WHERE meta_key = '$key' AND meta_value = '%d'";
+        $table = $wpdb->get_blog_prefix() . 'usermeta';
+		$key = EE_Attendee_ID;
+		$query = "SELECT user_id FROM $table WHERE meta_key = '$key' AND meta_value = '%d'";
         $user_id = $wpdb->get_var( $wpdb->prepare( $query, (int) $att_id ) );
         return $user_id ? (int) $user_id : NULL;
     }
