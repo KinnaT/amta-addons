@@ -632,7 +632,7 @@ class EED_WP_Users_SPCO  extends EED_Module {
                 $user = get_user_by( 'email', $attendee->email() );
 
                 //does this user have the same att_id as the given att?  If NOT, then we do NOT update because it's possible there was a family member or something sharing the same email address but is a different attendee record.
-                $att_id = $user instanceof WP_User ? get_user_data( 'EE_Attendee_ID', $user->ID ) : $att_id;
+                $att_id = $user instanceof WP_User ? get_user_meta( 'EE_Attendee_ID', $user->ID ) : $att_id;
                 if ( ! empty( $att_id ) && $att_id !== $attendee->ID() ) {
                     return;
                 }
