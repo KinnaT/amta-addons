@@ -57,8 +57,18 @@ class PageTemplater {
         }
         // Initializes the plugin by setting filters and administration functions.
         private function __construct() {
-                $this->templates = array();
-                // Add a filter to the attributes metabox to inject template into the cache.
+            $this->templates = array();
+            // Add a filter to the attributes metabox to inject template into the cache.
+            if ( version_compare( floatval($GLOBALS['wp_version']), '4.7', '<' ) ) { // 4.6 and older
+                add_filter(
+                    'page_attributes_dropdown_pages_args',
+                    array( $this, 'register_project_templates' )
+                );
+            } else { // Add a filter to the wp 4.7 version attributes metabox
+                add_filter(
+                    'theme_page_templates', array( $this, 'add_new_template' )
+                );
+            }
                 add_filter(
                     'page_attributes_dropdown_pages_args',
                      array( $this, 'register_project_templates' )
@@ -76,8 +86,7 @@ class PageTemplater {
                 // Add your templates to this array.
                 $this->templates = array(
                         'cert-template.php' => 'Certificate',
-                        'leg-cert-template.php' => 'Legacy Certificate',
-                        'test-template.php' => 'Test Certificate'
+                        'leg-cert-template.php' => 'Legacy Certificate'
                 );
 
         }
@@ -97,6 +106,10 @@ class PageTemplater {
                 wp_cache_add( $cache_key, $templates, 'themes', 1800 );
                 return $atts;
         }
+        public function add_new_template( $posts_templates ) {
+            $posts_templates = array_merge( $posts_templates, $this->templates );
+            return $posts_templates;
+        }
         // Checks if the template is assigned to the page
         public function view_project_template( $template ) {
                 global $post;
@@ -114,8 +127,6 @@ class PageTemplater {
 }
 add_action( 'plugins_loaded', array( 'PageTemplater', 'get_instance' ) );
 // add_action( 'the_content', 'leg_credits')
-
-
 
 // End of file ee-addon-cert.php
 // Location: wp-content/plugins/ee4-cert/ee-addon-cert.php
