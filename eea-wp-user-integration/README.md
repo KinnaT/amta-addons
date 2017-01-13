@@ -1,5 +1,9 @@
 ## EE4 WP Users Integration Addon
 
+Why does this fix the add-on for non-multisite installs??
+This changes the add-on so registrations from the back-end auto-create users and link them correctly to the Attendee.
+But why?
+
 Changes:
 * EE_WPUsers.class.php - Line 104  
   Amended query, as the table should be get_blog_prefix() . 'usermeta'; and the meta should simply be 'EE_Attendee_ID' without a prefix
