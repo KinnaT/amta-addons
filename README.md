@@ -1,4 +1,4 @@
-# event-espresso-addons
+# amta-addons
 
 Repo for AMTA WordPress plugin development.
 
